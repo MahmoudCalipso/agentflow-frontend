@@ -1,0 +1,61 @@
+<div class="node-palette">
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Search nodes..."
+      [(ngModel)]="searchQuery"
+      (input)="filterNodes()"
+      aria-label="Search nodes"
+    />
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <span>Loading nodes...</span>
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="categories">
+      @for (cat of categories; track cat) {
+        <div class="category">
+          <div
+            class="category-header"
+            (click)="toggleCategory(cat)"
+            tabindex="0"
+            role="button"
+            [attr.aria-expanded]="cat.expanded"
+          >
+            <span class="chev" [class.rotated]="!cat.expanded">▼</span>
+            <span class="title">{{ cat.name }}</span>
+            <span class="count">{{ cat.nodes.length }}</span>
+          </div>
+          @if (cat.expanded) {
+            <div class="category-content">
+              @for (node of cat.nodes; track node) {
+                <div
+                  class="palette-item"
+                  draggable="true"
+                  (dragstart)="onDragStart($event, node.type)"
+                  (dragend)="onDragEnd($event)"
+                  tabindex="0"
+                >
+                  <div class="item-icon">{{ node.type.charAt(0).toUpperCase() }}</div>
+                  <div class="item-details">
+                    <div class="item-name">{{ node.name || node.type }}</div>
+                    @if (node.description) {
+                      <div class="item-desc">{{ node.description }}</div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+      @if (categories.length === 0 && searchQuery) {
+        <div class="empty-state">No nodes found matching '{{ searchQuery }}'</div>
+      }
+    </div>
+  }
+</div>

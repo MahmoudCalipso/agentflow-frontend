@@ -1,0 +1,57 @@
+<div
+  class="af-node"
+  [class.selected]="isSelected"
+  [class.failed]="node.hasErrors || node.status === 'failed'"
+  [class.running]="node.status === 'running'"
+  [ngClass]="statusClass"
+  (click)="onNodeClick($event)"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Node ' + (node.label || node.type)"
+>
+  <div class="header">
+    <div class="icon-wrapper">
+      <!-- Icon based on type or category -->
+      <span class="icon">{{ node.type.charAt(0).toUpperCase() }}</span>
+    </div>
+    <div class="title-container">
+      <span class="title">{{ node.label || node.type }}</span>
+      <span class="subtitle">{{ node.category }}</span>
+    </div>
+  </div>
+
+  <div class="ports">
+    <!-- Main Input Port -->
+    <div
+      class="port-in"
+      data-port-type="main"
+      [attr.data-node-id]="node.id"
+      aria-label="Input port"
+    ></div>
+
+    <!-- Main Output Port -->
+    <div
+      class="port-out"
+      data-port-type="main"
+      [attr.data-node-id]="node.id"
+      aria-label="Output port"
+    ></div>
+  </div>
+
+  @if (node.status) {
+    <div class="status-indicator">
+      @if (node.status === 'success') {
+        <span class="badge success">✔</span>
+      }
+      @if (node.status === 'failed') {
+        <span class="badge failed">✖</span>
+      }
+      @if (node.status === 'running') {
+        <span class="badge running">⏳</span>
+      }
+      @if (node.status === 'retry') {
+        <span class="badge retry">🔄</span>
+      }
+    </div>
+  }
+</div>

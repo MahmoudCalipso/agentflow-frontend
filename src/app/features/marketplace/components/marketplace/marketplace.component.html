@@ -1,0 +1,59 @@
+<div class="marketplace-modal">
+  <div class="header">
+    <h2>Community Node Registry</h2>
+    <div class="search">
+      <input type="text" placeholder="Search 1,200+ nodes..." [(ngModel)]="searchQuery" />
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      Connecting to registry...
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="packages-grid">
+      @for (pkg of packages; track pkg) {
+        <div class="package-card">
+          <div class="card-header">
+            <div class="icon">{{ pkg.name.charAt(0) }}</div>
+            <div class="info">
+              <h3>
+                {{ pkg.name }}
+                @if (pkg.verified) {
+                  <span class="badge verified" title="Verified Publisher">✓</span>
+                }
+              </h3>
+              <span class="author">by {{ pkg.author }}</span>
+            </div>
+          </div>
+          <p class="desc">{{ pkg.description }}</p>
+          <div class="meta">
+            <span class="version">v{{ pkg.version }}</span>
+            <span class="downloads">⬇ {{ pkg.downloads | number }}</span>
+            <a [href]="pkg.sbomUrl" class="sbom-link" title="View Source Build Manifest">SBOM</a>
+          </div>
+          <button
+            class="btn-install"
+            [class.installed]="pkg.installed"
+            [class.loading]="pkg.installing"
+            (click)="installPackage(pkg)"
+            [disabled]="pkg.installed || pkg.installing"
+          >
+            @if (!pkg.installing && !pkg.installed) {
+              <span>Install Node</span>
+            }
+            @if (pkg.installing) {
+              <span>Parsing Manifest...</span>
+            }
+            @if (pkg.installed) {
+              <span>Installed ✓</span>
+            }
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

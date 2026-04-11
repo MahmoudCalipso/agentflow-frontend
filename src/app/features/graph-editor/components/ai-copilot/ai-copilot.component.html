@@ -1,0 +1,59 @@
+<div class="ai-copilot-panel">
+  <div class="header">
+    <div class="title">
+      <span class="icon">✨</span>
+      <h3>AI Copilot</h3>
+    </div>
+    <span class="badge">Beta</span>
+  </div>
+
+  <div class="chat-history" role="log" aria-live="polite">
+    @for (msg of messages; track msg) {
+      <div class="message" [ngClass]="msg.role">
+        <div class="avatar">
+          {{ msg.role === 'ai' ? '🤖' : '👤' }}
+        </div>
+        <div class="bubble" [class.streaming]="msg.isStreaming">
+          {{ msg.text }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="input-area">
+    <textarea
+      [(ngModel)]="promptText"
+      (keydown)="onKeyDown($event)"
+      placeholder="Type here..."
+      rows="2"
+      aria-label="AI Prompt input"
+    >
+    </textarea>
+    <button
+      class="send-btn"
+      (click)="submitPrompt()"
+      [disabled]="isGenerating || !promptText.trim()"
+      aria-label="Send prompt"
+    >
+      @if (!isGenerating) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      }
+      @if (isGenerating) {
+        <span class="spinner"></span>
+      }
+    </button>
+  </div>
+</div>

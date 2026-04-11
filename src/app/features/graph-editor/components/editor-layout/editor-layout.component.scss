@@ -1,0 +1,69 @@
+.editor-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: #fafafa;
+}
+
+.toolbar-area {
+    height: 60px;
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 10;
+}
+
+.logo {
+    font-weight: 600;
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: #ff41f8;
+}
+
+.main-body {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 60px);
+}
+
+.palette-drawer {
+    width: 320px;
+    background: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.canvas-area {
+    flex: 1;
+    position: relative;
+    background-color: #f3f5f8;
+    background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+    background-size: 20px 20px;
+    overflow: hidden;
+}
+
+.copilot-overlay {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 20;
+}
+
+.inspector-drawer {
+    width: 380px;
+    background: #ffffff;
+    border-left: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.properties-header {
+    padding: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f9f9f9;
+}

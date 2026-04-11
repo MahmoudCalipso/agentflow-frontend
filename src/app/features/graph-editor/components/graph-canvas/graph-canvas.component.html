@@ -1,0 +1,89 @@
+<div class="canvas-container" #graphContainer tabindex="0">
+  <!-- Controls Overlay -->
+  <div class="canvas-controls">
+    <button class="icon-btn" aria-label="Zoom In" (click)="view.scale = view.scale + 0.1">
+      ➕
+    </button>
+    <button class="icon-btn" aria-label="Zoom Out" (click)="view.scale = view.scale - 0.1">
+      ➖
+    </button>
+    <button
+      class="icon-btn"
+      aria-label="Reset View"
+      (click)="view.x = 0; view.y = 0; view.scale = 1"
+    >
+      🎯
+    </button>
+  </div>
+
+  <!-- Main Canvas Graph Layer -->
+  <div class="graph-layer" [style.transform]="getMapTransform()" [style.transformOrigin]="'0 0'">
+    <!-- SVG Layer for drawing beziers behind nodes -->
+    <svg class="edges-layer">
+      <!-- Defs for arrow heads and animations -->
+      <defs>
+        <marker
+          id="arrowhead"
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#a4b0be" />
+        </marker>
+      </defs>
+
+      <!-- Render committed edges -->
+      @for (edge of edges; track edge) {
+        <path [attr.d]="getEdgePath(edge)" class="af-edge" fill="transparent" />
+      }
+
+      <!-- Render draft edge currently being drawn by user -->
+      @if (isDrawingEdge) {
+        <path [attr.d]="getDraftEdgePath()" class="af-edge draft-edge" fill="transparent" />
+      }
+    </svg>
+
+    <!-- HTML Layer for Node manipulation (easier accessibility & forms) -->
+    <div class="nodes-layer">
+      @for (node of nodes; track node) {
+        <af-node-card
+          [node]="{
+            id: node.id,
+            type: node.type,
+            label: node.label || node.type,
+            category: 'Logic',
+          }"
+          [isSelected]="selectedNodeId === node.id"
+          [ngStyle]="{
+            transform: 'translate(' + node.position.x + 'px, ' + node.position.y + 'px)',
+            position: 'absolute',
+          }"
+          (mousedown)="onNodeMouseDown($event, node)"
+          (click)="onNodeSelected(node)"
+        >
+        </af-node-card>
+      }
+
+      <!-- Transparent overlay ports to catch mouse edge-draw connections -->
+      @for (node of nodes; track node) {
+        <!-- Out Port Overlay -->
+        <div
+          class="port-overlay out-port"
+          [style.left.px]="node.position.x + 234"
+          [style.top.px]="node.position.y + 34"
+          (mousedown)="onPortMouseDown($event, node.id, 'main', true)"
+        ></div>
+        <!-- In Port Overlay -->
+        <div
+          class="port-overlay in-port"
+          [style.left.px]="node.position.x - 6"
+          [style.top.px]="node.position.y + 34"
+          (mouseup)="onPortMouseUp($event, node.id, 'main', true)"
+        ></div>
+      }
+    </div>
+  </div>
+</div>

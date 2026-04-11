@@ -1,0 +1,23 @@
+<div class="config-panel">
+  <div class="header">
+    <h3>Node Configuration</h3>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">Loading schema mapping...</div>
+  }
+
+  @if (!loading) {
+    <div class="form-container">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <formly-form [form]="form" [fields]="fields" [model]="model"> </formly-form>
+        <div class="actions">
+          <button type="submit" [disabled]="!form.valid" class="btn-primary">Save Settings</button>
+        </div>
+      </form>
+      @if (fields.length === 0) {
+        <div class="empty-state">This node requires no configuration.</div>
+      }
+    </div>
+  }
+</div>

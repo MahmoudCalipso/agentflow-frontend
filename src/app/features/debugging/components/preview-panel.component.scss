@@ -1,0 +1,127 @@
+.preview-panel {
+    background: var(--af-bg, #ffffff);
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #fafbfc;
+        border-bottom: 1px solid #e1e4e8;
+
+        h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .refresh-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--af-text-muted, #636e72);
+
+            &:hover {
+                color: var(--af-primary, #ff6d5a);
+            }
+        }
+    }
+
+    .loading-state,
+    .empty-state {
+        padding: 24px;
+        text-align: center;
+        color: var(--af-text-muted, #636e72);
+        font-size: 13px;
+    }
+
+    .preview-content {
+        padding: 16px;
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+
+            .metric-box {
+                background: #f1f2f6;
+                padding: 12px;
+                border-radius: 6px;
+                text-align: center;
+
+                .label {
+                    display: block;
+                    font-size: 11px;
+                    color: var(--af-text-muted, #636e72);
+                    margin-bottom: 4px;
+                }
+
+                .value {
+                    font-size: 14px;
+                    font-weight: 600;
+                    font-family: monospace;
+                }
+
+                &.confidence .value {
+                    &.success {
+                        color: var(--af-success, #00b894);
+                    }
+
+                    &.warning {
+                        color: var(--af-warning, #fdcb6e);
+                    }
+
+                    &.danger {
+                        color: var(--af-error, #d63031);
+                    }
+                }
+            }
+        }
+
+        .validation-issues {
+            margin-bottom: 16px;
+            background: rgba(214, 48, 49, 0.05);
+            padding: 12px;
+            border-left: 4px solid var(--af-error, #d63031);
+            border-radius: 4px;
+
+            h4 {
+                margin: 0 0 8px 0;
+                font-size: 12px;
+                color: var(--af-error, #d63031);
+            }
+
+            ul {
+                margin: 0;
+                padding-left: 16px;
+                font-size: 12px;
+                color: var(--af-text, #2d3436);
+            }
+        }
+
+        .btn-execute {
+            width: 100%;
+            border: none;
+            background: var(--af-primary, #ff6d5a);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+
+            &:disabled {
+                background: #d1d5da;
+                cursor: not-allowed;
+            }
+
+            &:hover:not(:disabled) {
+                background: #e65c49;
+            }
+        }
+    }
+}

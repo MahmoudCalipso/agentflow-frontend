@@ -1,0 +1,88 @@
+.canvas-container {
+    width: 100%;
+    height: 100%;
+    background-color: #f8f9fa;
+    background-image:
+        linear-gradient(#e1e4e8 1px, transparent 1px),
+        linear-gradient(90deg, #e1e4e8 1px, transparent 1px);
+    background-size: 20px 20px;
+    position: relative;
+    overflow: hidden;
+    outline: none; // Handled by standard layout
+
+    .canvas-controls {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 100;
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: 1px solid #d1d5da;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+            &:hover {
+                background: #f1f2f6;
+            }
+        }
+    }
+
+    .graph-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        will-change: transform;
+
+        .edges-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10000px; // Expanding svg boundary logically
+            height: 10000px;
+            overflow: visible;
+            pointer-events: none;
+            z-index: 10;
+
+            .af-edge {
+                stroke: #a4b0be;
+                stroke-width: 2.5;
+                transition: stroke 0.2s ease;
+
+                &:hover {
+                    stroke: var(--af-primary, #ff6d5a);
+                    stroke-width: 3.5;
+                }
+
+                &.draft-edge {
+                    stroke-dasharray: 5, 5;
+                    stroke: var(--af-primary, #ff6d5a);
+                }
+            }
+        }
+
+        .nodes-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 20;
+
+            .port-overlay {
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                cursor: crosshair;
+                z-index: 30;
+            }
+        }
+    }
+}

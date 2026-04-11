@@ -1,0 +1,50 @@
+<div class="execution-controls">
+  <div class="state-indicator" [ngClass]="state">
+    <span class="status-dot"></span>
+    <span class="status-text">{{ state | titlecase }}</span>
+    @if (state !== 'idle') {
+      <span class="timer">{{ formatTime(elapsedTime) }}</span>
+    }
+  </div>
+
+  <div class="actions">
+    <!-- Run / Execute Workflow -->
+    <button
+      class="btn btn-primary"
+      (click)="runWorkflow()"
+      [disabled]="state === 'running'"
+      aria-label="Run Workflow"
+    >
+      ▶ Run
+    </button>
+
+    <!-- Stop Workflow -->
+    @if (state === 'running') {
+      <button class="btn btn-danger" (click)="stopWorkflow()" aria-label="Stop Workflow">
+        ■ Stop
+      </button>
+    }
+
+    <!-- Pause/Step Debug Controls -->
+    <button
+      class="btn btn-secondary icon-only"
+      (click)="pauseWorkflow()"
+      [disabled]="state !== 'running'"
+      title="Pause Execution"
+      aria-label="Pause Execution"
+    >
+      ⏸
+    </button>
+
+    <!-- Time-travel Debug Replay -->
+    <button
+      class="btn btn-secondary icon-only"
+      (click)="replayExecution()"
+      [disabled]="!currentExecutionId || state === 'running'"
+      title="Replay from Memory"
+      aria-label="Replay Execution"
+    >
+      ⏪
+    </button>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<div class="trace-visualizer">
+  <div class="header">
+    <h3>Execution Trace</h3>
+    @if (executionId) {
+      <span class="sub">ID: {{ executionId }}</span>
+    }
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">Loading historical traces...</div>
+  }
+
+  @if (!loading) {
+    <div class="traces-layout">
+      <div class="timeline" role="list">
+        @for (trace of traces; track trace; let i = $index) {
+          <div
+            class="trace-item"
+            [class.selected]="selectedTrace === trace"
+            (click)="selectTrace(trace)"
+            role="listitem"
+            tabindex="0"
+          >
+            <div class="trace-icon" [ngClass]="trace.eventType">
+              @if (trace.eventType === 'started') {
+                <span>▶</span>
+              }
+              @if (trace.eventType === 'completed') {
+                <span>✔</span>
+              }
+              @if (trace.eventType === 'failed') {
+                <span>✖</span>
+              }
+              @if (trace.eventType === 'retry') {
+                <span>🔄</span>
+              }
+              @if (trace.eventType === 'stream_chunk') {
+                <span>〰</span>
+              }
+            </div>
+            <div class="trace-info">
+              <div class="node-id">{{ trace.nodeId }}</div>
+              <div class="time">{{ trace.timestamp | date: 'HH:mm:ss.SSS' }}</div>
+            </div>
+          </div>
+        }
+        @if (traces.length === 0) {
+          <div class="empty-state">No execution data available.</div>
+        }
+      </div>
+      @if (selectedTrace) {
+        <div class="trace-detail">
+          <h4>{{ selectedTrace.nodeId }} Output</h4>
+          <div class="meta">
+            <span class="badge" [ngClass]="selectedTrace.eventType">
+              {{ selectedTrace.eventType | uppercase }}
+            </span>
+          </div>
+          <div class="data-preview">
+            <pre>{{ formatData(selectedTrace.data) }}</pre>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

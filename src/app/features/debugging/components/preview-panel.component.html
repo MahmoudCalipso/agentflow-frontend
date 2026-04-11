@@ -1,0 +1,55 @@
+<div class="preview-panel">
+  <div class="header">
+    <h3>Execution Prediction</h3>
+    <button
+      class="refresh-btn"
+      (click)="refreshPreview()"
+      [disabled]="loading"
+      aria-label="Refresh Preview"
+    >
+      ↻
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">Analyzing graph configuration...</div>
+  }
+
+  @if (!loading && preview) {
+    <div class="preview-content">
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <span class="label">Est. Latency</span>
+          <span class="value">{{ preview.estimated_latency_ms }} ms</span>
+        </div>
+        <div class="metric-box">
+          <span class="label">Est. Cost</span>
+          <span class="value">${{ preview.estimated_cost_usd | number: '1.4-4' }}</span>
+        </div>
+        <div class="metric-box confidence">
+          <span class="label">Success Prob.</span>
+          <span class="value" [ngClass]="confidenceColor">
+            {{ (preview.success_probability * 100).toFixed(1) }}%
+          </span>
+        </div>
+      </div>
+      @if (!preview.valid) {
+        <div class="validation-issues">
+          <h4>Validation Warnings ({{ preview.validation_errors.length }})</h4>
+          <ul>
+            @for (err of preview.validation_errors; track err) {
+              <li>{{ err }}</li>
+            }
+          </ul>
+        </div>
+      }
+      <button class="btn-execute" [disabled]="!preview.valid" (click)="executeClicked.emit()">
+        Confirm & Execute
+      </button>
+    </div>
+  }
+
+  @if (!loading && !preview) {
+    <div class="empty-state">Modify the graph to see predictions.</div>
+  }
+</div>
