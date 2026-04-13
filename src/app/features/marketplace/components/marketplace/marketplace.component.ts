@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../../core/services/api.service';
+import { NodeDiscoveryService } from '../../../../core/services/node-discovery.service';
 import { NodePackage } from '../../../../models/agentflow-api';
 
 interface MarketplaceItem extends NodePackage {
@@ -23,6 +24,7 @@ interface MarketplaceItem extends NodePackage {
 })
 export class MarketplaceComponent implements OnInit {
     private api = inject(ApiService);
+    private discovery = inject(NodeDiscoveryService);
 
     public searchQuery: string = '';
     public packages: MarketplaceItem[] = [];
@@ -63,6 +65,7 @@ export class MarketplaceComponent implements OnInit {
                 setTimeout(() => {
                     pkg.installing = false;
                     pkg.installed = true;
+                    this.discovery.refresh(); // Refresh the palette to show the new node
                 }, 1500);
             },
             error: () => {

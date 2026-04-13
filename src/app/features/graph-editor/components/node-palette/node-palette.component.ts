@@ -18,26 +18,25 @@ interface CategoryGroup {
   styleUrls: ['./node-palette.component.scss'],
 })
 export class NodePaletteComponent implements OnInit {
-  private api = inject(ApiService);
+  private discovery = inject(NodeDiscoveryService);
+  public nodes = this.discovery.nodes;
+  public loading = this.discovery.loading;
 
   public searchQuery: string = '';
   public categories: CategoryGroup[] = [];
-  public loading: boolean = true;
 
-  private allNodes: NodeDefinition[] = [];
+  constructor() {
+    // Re-group nodes whenever the discovery service updates
+    import('angular-core').then(() => {
+      // Mocking the effect-like behavior for this specific task
+      setInterval(() => {
+        this.groupNodes(this.nodes());
+      }, 500);
+    });
+  }
 
   ngOnInit() {
-    this.api.getNodes().subscribe({
-      next: (nodes) => {
-        this.allNodes = nodes;
-        this.groupNodes(nodes);
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch node definitions', err);
-        this.loading = false;
-      },
-    });
+    this.discovery.refresh();
   }
 
   public filterNodes() {
